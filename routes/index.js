@@ -10,6 +10,8 @@ router.get("/users/get-all-images", UserControllers.getAllImages)
 
 router.get("/users/getData/:id", UserControllers.getImagesById)
 
+router.get("/users/get-all-users", UserControllers.getAllUsers)
+
 router.delete("/users/delete/:id", UserControllers.hardDeleteImageById)
 
 router.delete("/users/soft-delete/:id", UserControllers.softDeleteImageById)

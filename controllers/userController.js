@@ -130,6 +130,32 @@ class UserControllers{
         }
     }
 
+    static async getAllUsers(req, res) {
+        try {
+            const users = await prisma.user.findMany();
+            if (users.length === 0) {
+                res.status(404).json({
+                    message: "No users found"
+                });
+            } else {
+                const activeUsers = users.filter(user => user.isActive);
+                if (activeUsers.length === 0) {
+                    res.status(404).json({
+                        message: "No active users found"
+                    });
+                }
+                res.status(200).json(activeUsers);
+            }
+            // res.status(200).json(users);
+        } catch (error) {
+            console.log("Error fetching users: ", error);
+            res.status(500).json({
+                message: "Internal Server Error",
+                error: error.message
+            });
+        }
+    }
+
     static async hardDeleteImageById(req, res) {
         try {
             const { id } = req.params;
