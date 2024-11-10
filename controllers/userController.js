@@ -1,6 +1,6 @@
 const {PrismaClient} = require("@prisma/client")
 const prisma = new PrismaClient()
-const imagekit = require("../libs/imageKit");
+const imagekit = require("../libs/imagekit");
 
 class UserControllers{ 
     static async addUser(req,res){
