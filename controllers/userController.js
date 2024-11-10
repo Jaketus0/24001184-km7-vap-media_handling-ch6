@@ -27,29 +27,32 @@ class UserControllers{
         }
     }
 
-    static async addImage(req, res){
+    static async addImage(req, res) {
         try {
             let stringFile = req.file.buffer.toString("base64");
             
-            if(!res.file || req.length === 0){
-                res.status(400).json({
+            if (!req.file || req.file.length === 0) {
+                // Return immediately after sending the response
+                return res.status(400).json({
                     message: "Bad Request",
                     error: "File not found"
-                })
+                });
             }
+    
             const { title, description } = req.body;
-
-            const uploadImage= await imagekit.upload({
+    
+            const uploadImage = await imagekit.upload({
                 file: stringFile,
                 fileName: req.file.originalname
-            })
-            // console.log("uploadImage ==>>", uploadImage);
-            if(!uploadImage){
-                res.status(400).json({
+            });
+    
+            if (!uploadImage) {
+                // Return immediately after sending the response
+                return res.status(400).json({
                     message: "Bad Request"
-                })
+                });
             }
-
+    
             const imageAdd = await prisma.image.create({
                 data: {
                     title: title, // Gunakan title yang diberikan atau default 'Default Title'
@@ -57,16 +60,20 @@ class UserControllers{
                     profileImageUrl: uploadImage.url,
                     imageFileId: uploadImage.fileId
                 }
-            })
+            });
+            
             console.log("imageAdd ==>>", imageAdd);
             
-            res.status(201).json(imageAdd)
+            // Send the successful response once
+            return res.status(201).json(imageAdd);
+            
         } catch (error) {
             console.log(error, "ini error dari userController");
-            // res.status(500).json(error)
-            
+            // Send a response in case of error
+            return res.status(500).json({ message: "Internal Server Error", error: error.message });
         }
     }
+    
 
     static async getAllImages(req, res) {
         try {
