@@ -2,7 +2,6 @@ const router = require('express').Router();
 const multerUpload = require("../libs/multer");
 const UserControllers = require("../controllers/userController");
 
-
 router.post("/users/add-user", UserControllers.addUser);
 
 router.post("/users/add-image", multerUpload.single("image"), UserControllers.addImage)
